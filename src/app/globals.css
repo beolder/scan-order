@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f6f7f9;
+  --card: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b7280;
+  --brand: #e11d48;
+  --brand-dark: #be123c;
+  --ok: #059669;
+  --warn: #d97706;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Noto Sans SC",
+    "Microsoft YaHei", sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

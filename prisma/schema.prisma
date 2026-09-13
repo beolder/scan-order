@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Table {
+  id     String  @id @default(cuid())
+  number String  // 桌号
+  orders Order[]
+}
+
+model MenuItem {
+  id        String  @id @default(cuid())
+  name      String  // 名称
+  price     Int     // 价格，单位：分
+  available Boolean @default(true) // 是否上架
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  tableId    String
+  table      Table       @relation(fields: [tableId], references: [id])
+  total      Int         // 总价，单位：分
+  payChannel String?     // wechat | alipay
+  status     String      @default("pending_pay")
+  // pending_pay | paid | preparing | done | cancelled
+  items      OrderItem[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String @id @default(cuid())
+  orderId   String
+  order     Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  itemId    String
+  qty       Int
+  unitPrice Int    // 下单时单价快照，单位：分
+}

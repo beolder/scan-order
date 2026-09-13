@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "file:./dev.db"
+      MERCHANT_USERNAME: "${MERCHANT_USERNAME:-merchant}"
+      MERCHANT_PASSWORD: "${MERCHANT_PASSWORD:-demo1234}"
+      SESSION_SECRET: "${SESSION_SECRET:-scan-order-demo-session-secret-change-me}"
+      APP_BASE_URL: "${APP_BASE_URL:-http://localhost:3000}"
+      WECHAT_PAY_MOCK_KEY: "${WECHAT_PAY_MOCK_KEY:-wechat-mock-key}"
+      ALIPAY_MOCK_KEY: "${ALIPAY_MOCK_KEY:-alipay-mock-key}"
+      PAYMENT_FORCE_FAIL: "${PAYMENT_FORCE_FAIL:-false}"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
